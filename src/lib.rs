@@ -14,6 +14,26 @@ pub struct Graph {
 
 impl Graph {
 
+    pub fn read_file(path: &str) -> (usize, ListOfEdges){
+        let mut result: ListOfEdges = Vec::new();
+        let file = File::open(path).expect("Could not open file");
+        let mut buf_reader = std::io::BufReader::new(file).lines();
+        let mut max_node = 0;
+        buf_reader.next();
+    
+        for line in buf_reader {
+            let line_str = line.expect("Error reading");
+            let v: Vec<&str> = line_str.trim().split(',').collect();
+    
+            let x: Vertex = v[0].parse().expect("Invalid vertex");
+            let y: Vertex = v[1].parse().expect("Invalid vertex");
+    
+            max_node = max_node.max(x).max(y);
+            result.push((x,y));
+        }
+        (max_node +1,result)
+    }
+    
     pub fn add_directed_edges(&mut self, edges:&ListOfEdges) {
         for (u,v) in edges {
             self.outedges[*u].push(*v);
@@ -127,48 +147,6 @@ impl Graph {
 }
 
 
-pub fn read_file(path: &str) -> (usize, ListOfEdges){
-    let mut result: ListOfEdges = Vec::new();
-    let file = File::open(path).expect("Could not open file");
-    let mut buf_reader = std::io::BufReader::new(file).lines();
-    let mut max_node = 0;
-    buf_reader.next();
-
-    for line in buf_reader {
-        let line_str = line.expect("Error reading");
-        let v: Vec<&str> = line_str.trim().split(',').collect();
-
-        let x: Vertex = v[0].parse().expect("Invalid vertex");
-        let y: Vertex = v[1].parse().expect("Invalid vertex");
-
-        max_node = max_node.max(x).max(y);
-        result.push((x,y));
-    }
-    (max_node +1,result)
-}
-
-pub fn read_edges_by_time(path: &str, start: u64, end: u64) -> ListOfEdges {
-    let file = File::open(path).expect("Could not open file");
-    let mut buf_reader = std::io::BufReader::new(file).lines();
-    let mut result = Vec::new();
-
-    buf_reader.next(); // skip header
-
-    for line in buf_reader {
-        let line_str = line.expect("Error reading line");
-        let v: Vec<&str> = line_str.trim().split(',').collect();
-
-        let u: usize = v[0].parse().expect("Invalid vertex");
-        let v_: usize = v[1].parse().expect("Invalid vertex");
-        let timestamp: u64 = v[3].parse().expect("Invalid timestamp");
-
-        if timestamp >= start && timestamp <= end {
-            result.push((u, v_));
-        }
-    }
-
-    result
-}
 
 pub fn bfs(start: usize, graph: &AdjacencyLists) -> Vec<Option<usize>> {
     let mut queue = VecDeque::new();
