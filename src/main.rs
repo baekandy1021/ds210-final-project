@@ -89,7 +89,7 @@ fn main() {
     println!("2013 Subgraph");
 
     // closeness and betweenness for 2013 subgraph
-    let (n,edges) = Graph::read_file("bitcoinotc_by_year/bitcoinotc_201.csv");
+    let (n,edges) = Graph::read_file("bitcoinotc_by_year/bitcoinotc_2013.csv");
     let graph2013 = Graph::create_directed(n,&edges);
 
     let closeness = Graph::closeness(&graph2013);

@@ -13,7 +13,7 @@ pub struct Graph {
 }
 
 impl Graph {
-
+//reads file and outputs a the maxnode to identify and a list of edges
     pub fn read_file(path: &str) -> (usize, ListOfEdges){
         let mut result: ListOfEdges = Vec::new();
         let file = File::open(path).expect("Could not open file");
@@ -33,7 +33,7 @@ impl Graph {
         }
         (max_node +1,result)
     }
-    
+    //helper function to add directed edges
     pub fn add_directed_edges(&mut self, edges:&ListOfEdges) {
         for (u,v) in edges {
             self.outedges[*u].push(*v);
@@ -41,6 +41,7 @@ impl Graph {
         }
     }
 
+    //helper function to sort the list
     fn sort_graph_lists(&mut self) {
         for l in self.outedges.iter_mut() {
             l.sort();
@@ -49,6 +50,8 @@ impl Graph {
             l.sort();
         }
     }
+
+    //helper function to add directed edges
     pub fn create_directed(n:usize, edges:&ListOfEdges)-> Graph {
         let mut g = Graph{n,outedges:vec![vec![];n],inedges:vec![vec![];n]};
         g.add_directed_edges(edges);
@@ -56,6 +59,7 @@ impl Graph {
         g                                        
     }
 
+    //function that measures the degree centrality and outputs the in degree and the out degree
     pub fn degree_centrality(graph: &Graph, edges: &ListOfEdges) -> (Vec<usize>,Vec<usize>) {
         let n  = graph.outedges.len();
         let mut out_degree = vec![0;n];
@@ -73,13 +77,14 @@ impl Graph {
 
         (in_degree, out_degree)
     }
-
+    // reorders the nodes by highest degree to lowest
     pub fn sort_nodes_by_degree(degrees: &Vec<usize>) -> Vec<(usize, usize)> {
         let mut nodes: Vec<(usize, usize)> = degrees.iter().enumerate().map(|(i, &d)| (i, d)).collect();
         nodes.sort_by(|a, b| b.1.cmp(&a.1));
         nodes
     }
     
+    //calculates the closeness centrality
     pub fn closeness(graph: &Graph) -> Vec<f64> {
         let mut cent = vec![0.0;graph.n];
 
@@ -102,7 +107,7 @@ impl Graph {
         }
         cent
     }
-    
+    //calculates betweenness centrality
     pub fn betweenness(graph: &Graph) -> Vec<f64> {
         let n = graph.n;
         let mut centrality = vec![0.0; n];
@@ -147,7 +152,7 @@ impl Graph {
 }
 
 
-
+// bfs to compute the shortest path distances from a starting node to all other reachable nodes 
 pub fn bfs(start: usize, graph: &AdjacencyLists) -> Vec<Option<usize>> {
     let mut queue = VecDeque::new();
     let mut distance = vec![None; graph.len()];
