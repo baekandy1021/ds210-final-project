@@ -4,7 +4,7 @@ mod tests {
     use super::*;
     use crate::Graph;
     use final_project::bfs;
-
+    //test for graph construction
     #[test]
     fn test_graph_construction() {
         let edges = vec![(0, 1), (1, 2), (2, 0)];
@@ -18,7 +18,7 @@ mod tests {
         assert_eq!(graph.inedges[1], vec![0]);
         assert_eq!(graph.inedges[2], vec![1]);
     }
-
+    //check to make sure in and out degrees are calculated correctly
     #[test]
     fn test_degree_centrality() {
         let edges = vec![(0, 1), (0, 2), (2, 1)];
@@ -28,7 +28,7 @@ mod tests {
         assert_eq!(out_deg, vec![2, 0, 1]); 
         assert_eq!(in_deg, vec![0, 2, 1]);  
     }
-
+    //check to make sure bfs returns the right distance
     #[test]
     fn test_bfs() {
         let edges = vec![(0, 1), (1, 2)];
@@ -39,7 +39,7 @@ mod tests {
         assert_eq!(distances[1], Some(1)); 
         assert_eq!(distances[2], Some(2)); 
     }
-
+    //check to make sure closeness is calculated correctly
     #[test]
     fn test_closeness_centrality() {
         let edges = vec![(0, 1), (1, 2), (2, 3)];
@@ -50,7 +50,7 @@ mod tests {
         assert!((closeness[0] - 0.5) < 1e-6);
         assert_eq!(closeness[3], 0.0);
     }
-
+    //check to make sure betweenness is calculated correctly
     #[test]
     fn test_betweenness_centrality_small_graph() {
         let edges = vec![(0, 1), (1, 2), (2, 3)];

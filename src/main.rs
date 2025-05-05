@@ -17,6 +17,7 @@ fn main() {
     for (i, (node, degree)) in sorted_in.iter().enumerate().take(10) {
         println!("{}. Node {} <- in-degree: {}", i + 1, node, degree);
     }
+
     //Closeness Centrality
     let closeness = Graph::closeness(&graph);
     let mut sorted_closeness: Vec<(usize,f64)> = closeness.iter().enumerate().map(|(i,&c)|(i,c)).collect();
